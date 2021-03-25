@@ -33,10 +33,14 @@ class GoodsList{
     })
     document.querySelector('.goods-list').insertAdjacentHTML("afterbegin",textHTML);
   }
+  //расчет полной стоимости товаров
+  getFullPrice(){
+    return this.goods.reduce((fullPrice, goodItem) => fullPrice + goodItem.price, 0);}
 }
   const list = new GoodsList;
   list.fetchGoods();
   list.render();
+  console.log('Полная стоимость товаров', list.getFullPrice());
 
   //класс для элемента товара корзины
   class CartGoodItem extends GoodItem{
