@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>  <style>
+    .user-name,
+    .phone,
+    .email,
+    .message {
+      margin-bottom: 5px;
+      }
+    .select{
+      border: 2px solid red;
+    }
+  </style>
+</head>
+<script src="regexp.js"></script>
+<body>
+  <h3 class="header">Форма обратной связи</h3>
+  <form action="#" class = "form">
+    <div class = "error"></div>
+    Ваше имя: <input type="text" id = "user-name"><br>
+    Телефон: <input type="text" id = "phone" placeholder=" +7(000)000-0000"><br>
+    E-mail: <input type="text" id = "email"><br>
+    <textarea class = "message" cols="30" rows="10" placeholder="Ваше сообщение"></textarea><br>
+    <input type="submit" class = "submit">
+  </form>
+</body>
+</html>
