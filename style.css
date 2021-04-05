@@ -24,6 +24,11 @@
   cursor: pointer;
   outline: none;
 }
+.no-goods-message {
+  margin-left: 190px;
+  margin-top: 40px;
+  font-size: 16px;
+}
 .goods-list {
   display: flex;
   justify-content: space-between;
@@ -38,10 +43,10 @@
   margin-bottom: 28px;
   box-shadow: 0 0 5px #eaeaea;
   border: 8px solid #ffffff;
-  flex-basis: 20%;
+  flex-basis: 30%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   align-content: flex-start;
 }
 .goods-img {
