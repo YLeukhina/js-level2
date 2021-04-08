@@ -1,19 +1,92 @@
 window.onload = () =>{
-  const goods = [
-  { title: 'Lorem Ipsum is simply', price: 150, img: 'img/good-1.png'},
-  { title: 'Nullam vestibulum', price: 50, img: 'img/good-2.png'},
-  { title: 'Donec et lorem suscipit', price: 350, img: 'img/good-3.png'},
-  { title: 'Curabitur pretium duis', price: 250, img: 'img/good-4.png'},
-  { title: 'Donec et lorem suscipit', price: 350, img: 'img/good-3.png'},
-  { title: 'Curabitur pretium duis', price: 250, img: 'img/good-4.png'},
-  ];
-  const renderGoodsItem = (title, price, img) => {
-  return `<div class="goods-item"><img class="goods-img" src=${img} alt="Картинка товара"><div class="good-info-wrap"><span class="good-title">${title}</span><span class="good-price">${price}$</span></div><button class="add-to-cart"></button></div>`;
-  };
-  const renderGoodsList = (list = []) => {
-  let goodsList = list.map(item =>
-    renderGoodsItem(item.title, item.price, item.img));
-  document.querySelector('.goods-list').insertAdjacentHTML("afterbegin",goodsList.join(''));
+  //создать класс для товара
+  class GoodItem{
+    constructor(title, price) {
+      this.title = title;
+      this.price = price;
+    }  
+    render(){
+      let titleHtml = `<span class="good-title">${this.title}</span>`;
+      let priceHtml = `<span class="good-price">${this.price}$</span>`;
+      let goodHtml = `<div class="good-info-wrap">${titleHtml}${priceHtml}</div>`;
+      return `<div class="goods-item">${goodHtml}<button class="add-to-cart"></button></div>`;
+    }
   }
-  renderGoodsList(goods);
+//создать класс для списка товаров
+class GoodsList{
+  constructor(){
+    this.goods = [];
+  }
+  fetchGoods(method, url){
+    return new Promise((resolve, reject)=>{
+      let xhr;
+      if(window.XMLHttpRequest){
+        xhr = new window.XMLHttpRequest();
+    }
+      else if(window.ActiveXObject){
+        xhr = new window.ActiveXObject('Microsoft.XMLHTTP');
+      }
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4){
+          if(xhr.status === 200){
+            resolve(xhr.responseText);
+          }
+          else { 
+            reject('Error'); 
+          }    
+        }
+      }
+      xhr.open(method, url, true);
+      xhr.send();
+    })
+   }
+  render(){
+    let textHTML = '';
+    this.goods.forEach(goods => {
+      const goodItem = new GoodItem(goods.product_name, goods.price);
+      textHTML += goodItem.render();
+    })
+    document.querySelector('.goods-list').insertAdjacentHTML("afterbegin",textHTML);
+  }
+  //расчет полной стоимости товаров
+  getFullPrice(){
+    return this.goods.reduce((fullPrice, goodItem) => fullPrice + goodItem.price, 0);
+  }
+}
+class CartItem{ //конструктор класса "Товар корзины"
+  constructor(good, count = 1){
+    this.item = good;
+    this.count = count;
+  }
+}
+class Cart{ //конструктор класса "Корзина"
+  constructor(){
+    this.cartItems = [];
+  }
+  push(good){ //добавление товара в корзину
+    let cartItem;
+    cartItem = this.cartItems.find(item => item.name === good.name)
+    if(cartItem){
+      cartItem.count +=1;
+    }
+    else{
+      cartItem = new CartItem(good);
+      this.cartItems.push(cartItem);
+    }
+  }
+  getCartGoods() { //получение списка товаров в корзине
+    return this.cartItems;
+  }
+}
+//добавление товара в корзину
+const addToCart = (good) => cart.push(good);
+
+const  url = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+const list = new GoodsList;
+const cart = new Cart;
+list.fetchGoods('GET', `${url}/catalogData.json`)
+.then(response =>{
+  list.goods = JSON.parse(response);
+  list.render();
+})
 }
